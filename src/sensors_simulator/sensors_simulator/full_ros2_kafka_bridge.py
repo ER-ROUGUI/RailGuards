@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Float32, Bool
+from std_msgs.msg import Float32, Bool , Int32
 from kafka import KafkaProducer
 import json
 import time
@@ -11,51 +11,56 @@ class FullSensorROS2KafkaBridge(Node):
         super().__init__('full_ros2_kafka_bridge')
 
         # Initialize Kafka producer
-        self.kafka_producer = KafkaProducer(
-            bootstrap_servers='localhost:9092',  # Replace with your Kafka broker address
-            value_serializer=lambda v: json.dumps(v).encode('utf-8')
-        )
+        try:
+            self.kafka_producer = KafkaProducer(
+                bootstrap_servers='localhost:9092',  # Replace with your Kafka broker address
+                value_serializer=lambda v: json.dumps(v).encode('utf-8')
+            )
+            self.get_logger().info("Connected to Kafka broker successfully.")
+        except Exception as e:
+            self.get_logger().error(f"Failed to connect to Kafka broker: {e}")
+            raise e
 
         # Initialize variables for all sensors
         self.sensors = {
-            "pressure": None,
-            "oil_temperature": None,
-            "motor_current": None,
-            "air_temperature": None,
-            "humidity": None,
-            "vibration": None,
-            "air_pressure": None,
-            "valve_intake": None,
-            "valve_outlet": None,
-            "compressor_status": None,
-            "filter_status": None,
-            "safety_switch": None,
-            "overload_protection": None,
-            "emergency_stop": None,
-            "door_sensor": None
+            "TP2": None,
+            "TP3": None,
+            "H1": None,
+            "DV_pressure": None,
+            "Reservoirs": None,
+            "Oil_temperature": None,
+            "Motor_current": None,
+            "COMP": None,
+            "DV_eletric": None,
+            "Towers": None,
+            "MPG": None,
+            "LPS": None,
+            "Pressure_switch": None,
+            "Oil_level": None,
+            "Caudal_impulses": None
         }
 
         # Topic-to-sensor mapping for analog sensors
         self.analog_topics = {
-            'pressure': 'pressure',
-            'oil_temperature': 'oil_temperature',
-            'motor_current': 'motor_current',
-            'air_temperature': 'air_temperature',
-            'humidity': 'humidity',
-            'vibration': 'vibration',
-            'air_pressure': 'air_pressure'
+            'TP2': 'TP2',
+            'TP3': 'TP3',
+            'H1': 'H1',
+            'DV_pressure': 'DV_pressure',
+            'Reservoirs': 'Reservoirs',
+            'Oil_temperature': 'Oil_temperature',
+            'Motor_current': 'Motor_current'
         }
 
         # Topic-to-sensor mapping for digital sensors
         self.digital_topics = {
-            'valve_intake': 'valve_intake',
-            'valve_outlet': 'valve_outlet',
-            'compressor_status': 'compressor_status',
-            'filter_status': 'filter_status',
-            'safety_switch': 'safety_switch',
-            'overload_protection': 'overload_protection',
-            'emergency_stop': 'emergency_stop',
-            'door_sensor': 'door_sensor'
+            'COMP': 'COMP',
+            'DV_eletric': 'DV_eletric',
+            'Towers': 'Towers',
+            'MPG': 'MPG',
+            'LPS': 'LPS',
+            'Pressure_switch': 'Pressure_switch',
+            'Oil_level': 'Oil_level',
+            'Caudal_impulses': 'Caudal_impulses'
         }
 
         # Subscriptions for analog sensors
@@ -64,7 +69,7 @@ class FullSensorROS2KafkaBridge(Node):
 
         # Subscriptions for digital sensors
         for topic, sensor in self.digital_topics.items():
-            self.create_subscription(Bool, topic, lambda msg, s=sensor: self.digital_callback(msg, s), 10)
+            self.create_subscription(Int32, topic, lambda msg, s=sensor: self.digital_callback(msg, s), 10)
 
         # Timer to send combined data to Kafka
         self.timer = self.create_timer(1.0, self.send_combined_data)
@@ -83,8 +88,17 @@ class FullSensorROS2KafkaBridge(Node):
             "timestamp": time.time(),
             **self.sensors
         }
-        self.kafka_producer.send('fulldata', combined_data)
-        self.get_logger().info(f"Sent combined data to Kafka: {combined_data}")
+
+        # Check for None values to ensure completeness
+        missing_sensors = [key for key, value in self.sensors.items() if value is None]
+        if missing_sensors:
+            self.get_logger().warning(f"Missing sensor data for: {missing_sensors}")
+
+        try:
+            self.kafka_producer.send('fulldata', combined_data)
+            self.get_logger().info(f"Sent combined data to Kafka: {combined_data}")
+        except Exception as e:
+            self.get_logger().error(f"Failed to send data to Kafka: {e}")
 
 
 def main(args=None):

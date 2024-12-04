@@ -54,108 +54,97 @@ To set up the ROS2-based sensor simulation:
 5. Verify the data:
 
 List all ROS2 topics
-
+```bash
 ros2 topic list
+```
+
 Echo a topic, for example:
-bash
+
+```bash
 ros2 topic echo /air_temperature
+```
 
 
 ## 3) Data Streaming
+
 To set up Kafka for data streaming:
 
 Install Kafka and unzip it into the directory ~/kafka.
 
 Start the Kafka broker and Zookeeper:
-
+```bash
 ~/kafka/bin/zookeeper-server-start.sh ~/kafka/config/zookeeper.properties
+```
 In another terminal:
-
+```bash
 ~/kafka/bin/kafka-server-start.sh ~/kafka/config/server.properties
+```
 
 3. Verify Kafka is running:
 
 Verify Kafka is running:
 
 4. Launch the ROS2-Kafka bridge to send sensor data to Kafka:
-
+```bash
 ros2 run sensors_simulator full_ros2_kafka_bridge
+```
 
 5. Listen to the Kafka topic (fulldata) to view sensor data being streamed:
 
+```bash
 ~/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic fulldata
+```
 
+## Build
 
-## 
-markdown
-Copy code
 2. Build the ROS2 package:
    ```bash
    colcon build --symlink-install
+   ```
 Source the ROS2 workspace by adding it to your bash configuration:
 
-bash
-Copy code
+```bash
 echo "source ~/railGuards/ros2/install/setup.bash" >> ~/.bashrc
+```
+```bash
 source ~/.bashrc
+```
+
 Run the sensor simulator:
 
-bash
-Copy code
+```bash
 ros2 run sensors_simulator full_sensor_publisher
-Verify the data:
+```
 
-List all ROS2 topics:
-bash
-Copy code
-ros2 topic list
-Echo a topic, for example:
-bash
-Copy code
-ros2 topic echo /air_temperature
-3) Data Streaming
-To set up Kafka for data streaming:
-
-Install Kafka and unzip it into the directory ~/kafka.
-
-Start the Kafka broker and Zookeeper:
-
-bash
-Copy code
-~/kafka/bin/zookeeper-server-start.sh ~/kafka/config/zookeeper.properties
-In another terminal:
-
-bash
-Copy code
-~/kafka/bin/kafka-server-start.sh ~/kafka/config/server.properties
-Verify Kafka is running:
-
-bash
-Copy code
+```bash
 systemctl status kafka
+
 Launch the ROS2-Kafka bridge to send sensor data to Kafka:
 
-bash
-Copy code
+```bash
 ros2 run sensors_simulator full_ros2_kafka_bridge
+```
+
 Listen to the Kafka topic (fulldata) to view sensor data being streamed:
 
-bash
-Copy code
+```bash
 ~/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic fulldata
+```
 
-4) Data Processing with Spark
+## 4) Data Processing with Spark
 Sensor data contains noise and requires processing. To process data using Apache Spark:
 
 1. Navigate to the data processing directory:
-
+```bash
 cd ~/railGuards/data_processing
+```
 
 2. Run the Spark job:
-
+```bash
 spark-submit --jars ~/spark_jars/<required-jar-files> full_spark_processing.py
+```
 
-3. Verify that the cleaned data is being written to the Kafka topic (cleaned_sensor_data) and InfluxDB.
+# 3. Verify that the cleaned data is being written to the Kafka topic (cleaned_sensor_data) and InfluxDB.
 
 
 ## 5) Visualization with Grafana

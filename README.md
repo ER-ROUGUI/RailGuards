@@ -39,14 +39,17 @@ To set up the ROS2-based sensor simulation:
 2. Source the ROS2 workspace by adding it to your bash configuration:
  ```bash
  echo "source ~/railGuards/ros2/install/setup.bash" >> ~/.bashrc
+```
+
  ```bash
  source ~/.bashrc
+```
 
 4. Run the sensor simulator:
 
 ```bash
   ros2 run sensors_simulator full_sensor_publisher
-
+  ```
 
 5. Verify the data:
 

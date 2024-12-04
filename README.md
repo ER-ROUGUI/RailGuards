@@ -1,6 +1,6 @@
 # RailGuard: Morocco High Speed Train Hackathon Project
 
-Hello everyone! This project was developed by **Aya Harrak**, **Oumama Lemaoukni**, and **Er-Rougui Saad** as part of the Morocco High Speed Train Hackathon.
+Hello everyone! This project was developed by **Aya Harrak**, **Oumama Lemouakni**, and **Er-Rougui Saad** as part of the Morocco High Speed Train Hackathon.
 
 This README provides the steps to execute the codes included in this project.
 

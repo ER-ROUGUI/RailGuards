@@ -32,3 +32,31 @@ To set up the ROS2-based sensor simulation:
    ```bash
    cd ~/railGuards/ros2
 
+2. Build the ROS2 package:
+ ```bash
+ colcon build --symlink-install
+
+3. Source the ROS2 workspace by adding it to your bash configuration:
+
+```bash
+  echo "source ~/railGuards/ros2/install/setup.bash" >> ~/.bashrc
+  source ~/.bashrc
+
+4. Run the sensor simulator:
+
+```bash
+  ros2 run sensors_simulator full_sensor_publisher
+
+
+
+
+
+
+
+
+
+
+
+
+
+

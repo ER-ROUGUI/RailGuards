@@ -135,7 +135,18 @@ Use InfluxDB queries to visualize:
 Sensor metrics (e.g., temperature, pressure).
 Maintenance flags and anomaly rates from the Kafka topic future_anomaly_predictions.
 
+# AI Predection
 
+```bash
+cd ~/railGuards/machine_learning/data_processing/
+```
+then run :
+
+```bash
+python3 deployement.py
+```
+
+# Thank You
 
 
 

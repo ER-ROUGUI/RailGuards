@@ -138,7 +138,7 @@ Maintenance flags and anomaly rates from the Kafka topic future_anomaly_predicti
 # AI Predection
 
 ```bash
-cd ~/railGuards/machine_learning/data_processing/
+cd ~/railGuards/machine_learning/data_preprocessing/
 ```
 then run :
 

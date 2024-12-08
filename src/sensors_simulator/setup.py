@@ -24,7 +24,14 @@ setup(
             "ros_kafka = sensors_simulator.ros2_kafka_bridge:main",
             "vibration_sensor = sensors_simulator.vibration_publisher:main",
             "full_ros_kafka = sensors_simulator.full_ros2_kafka_bridge:main",
-            "full_sensor = sensors_simulator.full_sensor_publisher:main"
+            "full_sensor = sensors_simulator.full_sensor_publisher:main",
+            "full_sensor2 = sensors_simulator.full_sensor_publisher2:main",
+            "full_ros_kafka2 = sensors_simulator.full_ros2_kafka_bridge2:main",
+            "train1_sensors = sensors_simulator.publisher_train1:main",
+            "train2_sensors = sensors_simulator.publisher_train2:main"
+            
+
+           
             
         ],
     },
